@@ -251,7 +251,7 @@ function rebuild {
     
 	printf "${blue}%s${endc} ${white}%s${endc}\n" "[ ok ]" "$write_fstab"
 	printf "${blue}%s${endc} ${white}%s${endc}\n" "[ ok ]" "Updating Your initramfs..."
-	#update-initramfs -u -k all
+	update-initramfs -u -k all
 }
 
 # display program and version then exit

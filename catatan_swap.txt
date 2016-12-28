@@ -18,19 +18,23 @@ ekojs@ekojs-laptop:~$ sudo blkid
 #sda6_crypt UUID=5b154575-4677-4573-8f97-80664da5b864 none luks,swap,discard
 sda6_crypt UUID=b39babff-ccfb-47d2-bef7-576783659381 none luks,swap,discard
 
+Tambahkan entri untuk swap bila belum ada
+6. sudo vim /etc/fstab
+/dev/mapper/sda6_crypt none            swap    sw              0       0
+
 Kemudian di test dengan menjalankan cryptdisks_start
-6. sudo swapoff -a
-7. sudo cryptsetup luksClose sda6_crypt
-8. sudo cryptdisks_start sda6_crypt
+7. sudo swapoff -a
+8. sudo cryptsetup luksClose sda6_crypt
+9. sudo cryptdisks_start sda6_crypt
 
 Aktifkan Swap
-9. sudo swapon -a
-10. free -h
+10. sudo swapon -a
+11. free -h
 
 Nonaktifkan Swap
-11. sudo swapoff -a
-12. free -h
-13. sudo cryptsetup luksClose sda6_crypt
+12. sudo swapoff -a
+13. free -h
+14. sudo cryptsetup luksClose sda6_crypt
 
 Terakhir Update Initramfs
-14. sudo update-initramfs -u -k all
+15. sudo update-initramfs -u -k all
