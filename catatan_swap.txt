@@ -1,0 +1,36 @@
+Cara Membuat Encrypted Swap menggunakan LUKS
+1. sudo cryptsetup --verbose --verify-passphrase luksFormat /dev/sda6
+2. sudo cryptsetup luksOpen /dev/sda6 sda6_crypt 
+3. sudo mkswap -L swap /dev/mapper/sda6_crypt
+Gunakan UUID pada partisi untuk digunakan pada /etc/crypttab
+Data UUID untuk partisi /dev/sda6
+UUID="b39babff-ccfb-47d2-bef7-576783659381"
+
+Cek blkid
+4. sudo blkid
+ekojs@ekojs-laptop:~$ sudo blkid 
+/dev/sda1: UUID="fcb1ff57-fbfe-4f5d-82bf-fc372cf53904" TYPE="ext4" PARTUUID="2ba375fb-01"
+/dev/sda2: UUID="e87c4cc9-81cb-46ae-892d-15f6b1977bbc" TYPE="ext4" PARTUUID="2ba375fb-02"
+/dev/sda5: UUID="59a8a751-8f78-49ad-81ac-383f6870588c" TYPE="crypto_LUKS" PARTUUID="2ba375fb-05"
+/dev/sda6: UUID="b39babff-ccfb-47d2-bef7-576783659381" TYPE="crypto_LUKS" PARTUUID="2ba375fb-06"
+
+5. sudo vim /etc/crypttab
+#sda6_crypt UUID=5b154575-4677-4573-8f97-80664da5b864 none luks,swap,discard
+sda6_crypt UUID=b39babff-ccfb-47d2-bef7-576783659381 none luks,swap,discard
+
+Kemudian di test dengan menjalankan cryptdisks_start
+6. sudo swapoff -a
+7. sudo cryptsetup luksClose sda6_crypt
+8. sudo cryptdisks_start sda6_crypt
+
+Aktifkan Swap
+9. sudo swapon -a
+10. free -h
+
+Nonaktifkan Swap
+11. sudo swapoff -a
+12. free -h
+13. sudo cryptsetup luksClose sda6_crypt
+
+Terakhir Update Initramfs
+14. sudo update-initramfs -u -k all
